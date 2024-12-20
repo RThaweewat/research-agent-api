@@ -254,7 +254,7 @@ The `tracing_service` module initializes the Langfuse client for observability. 
 Clone the repository and navigate to the project directory:
 
 ```bash
-git clone https://github.com/your-repo/research-agent-api.git
+git clone https://github.com/RThaweewat/research-agent-api.git
 cd research-agent-api
 ```
 
