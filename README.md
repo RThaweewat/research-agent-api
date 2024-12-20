@@ -5,19 +5,21 @@ The Research Agent API is a robust tool for extracting and synthesizing informat
 the API simplifies access to research papers, integrating general knowledge with document-specific details to provide clear and efficient responses.
 
 ## Key Features
-- **Smart Question Routing:** Automatically directs queries to the most suitable processing mechanism, including conversational memory for context-aware responses, vector-based retrieval for document-specific answers, and general LLM-based solutions for broader questions.
-- **Hybrid Retrieval System:** Combines keyword search (BM25) with semantic search using FAISS and OpenAI Embeddings for comprehensive and accurate document discovery.
-- **Enhanced Query Rewriting:** Optimizes search precision by rephrasing user queries with advanced techniques.
-- **Layered Answer Generation:** Produces high-quality responses through a multi-stage process that includes self-assessment and quality assurance.
-- **Flexible Retrieval Pipeline:** Allows real-time indexing of newly uploaded documents, seamlessly updating the retrieval process.
-- **REST API Accessibility:** Provides easy integration with endpoints for document uploads, query handling, and managing conversational memory.
-- **Advanced Monitoring:** Incorporates Langfuse for in-depth logging, debugging, and performance monitoring, ensuring detailed insights into system operations.
+
+- **🧠 Smart Question Routing:** Automatically directs queries to the most suitable processing mechanism, including conversational memory for context-aware responses, vector-based retrieval for document-specific answers, and general LLM-based solutions for broader questions.
+- **🔍 Hybrid Retrieval System:** Combines keyword search (BM25) with semantic search using FAISS and OpenAI Embeddings for comprehensive and accurate document discovery.
+- **✨ Enhanced Query Rewriting:** Optimizes search precision by rephrasing user queries with advanced techniques.
+- **⚙️ Layered Answer Generation:** Produces high-quality responses through a multi-stage process that includes self-assessment and quality assurance.
+- **📄 Flexible Retrieval Pipeline:** Allows real-time indexing of newly uploaded documents, seamlessly updating the retrieval process.
+- **🌐 REST API Accessibility:** Provides easy integration with endpoints for document uploads, query handling, and managing conversational memory.
+- **📊 Advanced Monitoring:** Incorporates Langfuse for in-depth logging, debugging, and performance monitoring, ensuring detailed insights into system operations.
+- **🛡️ Failsafe Mechanism:** Ensures smooth operations by seamlessly switching to backup APIs in case the primary API is down.
 
 ## Technical Stack
 
 ### Core Components
 
-*   **Language Models**: 🧠
+*   **Language Models**: 
     *   Primary: Llama 3 70B Instruct via TogetherAI API. 🦙
     *   Backup: GPT-4o (via OpenAI API) for guaranteed response fallback in case of primary LLM issues. 🤖
 *   **🗄️ Vector Database:** FAISS (Facebook AI Similarity Search) for creating semantic embeddings.
