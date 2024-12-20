@@ -1,8 +1,8 @@
 # 🤖 Research Agent API
 
 ## Overview
-The Research Agent API is a robust tool for extracting and synthesizing information from research documents. Designed for researchers, academics, and professionals, 
-the API simplifies access to research papers, integrating general knowledge with document-specific details to provide clear and efficient responses.
+
+The Research Agent API helps you find and understand information from research documents. It’s made for researchers and professionals, combining general knowledge with specific details from documents to give clear and helpful answers.
 
 ## Key Features
 
