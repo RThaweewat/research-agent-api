@@ -1,0 +1,363 @@
+{
+  "info": {
+    "name": "Research Paper Agent API Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Initial Chat - Who are you?",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/query",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"question\": \"Who are you?\",\n    \"thread_id\": null,\n    \"config\": null\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response structure is valid\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('answer');",
+              "    pm.expect(jsonData).to.have.property('thread_id');",
+              "    pm.expect(jsonData).to.have.property('references');",
+              "    pm.collectionVariables.set(\"thread_id\", jsonData.thread_id);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Ask About Bangkok",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/query",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"question\": \"What is capital of Thailand?\",\n    \"thread_id\": \"{{thread_id}}\",\n    \"config\": null\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Answer mentions Bangkok\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.answer.toLowerCase()).to.include('bangkok');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Memory Test - Previous Question",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/query",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"question\": \"What was my previous question?\",\n    \"thread_id\": \"{{thread_id}}\",\n    \"config\": null\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Answer mentions Thailand or capital\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.answer.toLowerCase()).to.satisfy(function(text) {",
+              "        return text.includes('thailand') || text.includes('capital');",
+              "    });",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Upload Research Papers",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/docs/upload",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "files",
+              "type": "file",
+              "src": [
+                "papers/paper1.pdf",
+                "papers/paper2.pdf",
+                "papers/paper3.pdf",
+                "papers/paper4.pdf"
+              ]
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Files uploaded successfully\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.message).to.include('successfully');",
+              "    pm.expect(jsonData.details.successful.length).to.equal(4);",
+              "    pm.expect(jsonData.file_count).to.be.greaterThan(0);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Query About Text-to-SQL Papers",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/query",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"question\": \"What is conclusion of txt-2-sql paper?, which model is that best?\",\n    \"thread_id\": \"{{thread_id}}\",\n    \"config\": null\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response includes references\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.references).to.be.an('array');",
+              "    pm.expect(jsonData.references.length).to.be.greaterThan(0);",
+              "    pm.expect(jsonData.references[0]).to.have.all.keys('source', 'relevance_score', 'snippet');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Reset Thread",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/thread/reset?thread_id={{thread_id}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Thread reset successful\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.status).to.equal('success');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Ask About Previous Question After Reset",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/query",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"question\": \"What did I just ask?\",\n    \"thread_id\": \"{{thread_id}}\",\n    \"config\": null\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response indicates no history\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.answer.toLowerCase()).to.include('no previous');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Reset Vector Database",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/vectordb/reset",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Vector DB reset successful\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.status).to.equal('success');",
+              "    pm.expect(jsonData.has_documents).to.equal(false);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. Query About LLM Self-Debug",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/query",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"question\": \"Can LLMs benefit from multi-round self debug?\",\n    \"thread_id\": \"{{thread_id}}\",\n    \"config\": null\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response indicates no documents\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.answer.toLowerCase()).to.include('no documents');",
+              "    pm.expect(jsonData.references).to.be.an('array').that.is.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000"
+    },
+    {
+      "key": "thread_id",
+      "value": ""
+    }
+  ]
+}

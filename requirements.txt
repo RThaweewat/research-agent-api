@@ -1,0 +1,30 @@
+# FastAPI and Server
+fastapi==0.115.6
+uvicorn==0.34.0
+python-multipart==0.0.20
+
+# Environment Management
+python-dotenv==1.0.1
+
+# Logging
+loguru==0.7.3
+
+# Pydantic (Data Validation and Parsing)
+pydantic==2.10.4
+
+# LangChain and Related Libraries
+langchain==0.3.13
+langchain-core==0.3.28
+langchain-community==0.3.13
+langchain-openai==0.2.14
+langchain_together==0.2.0
+langgraph==0.2.60
+langfuse==2.57.0
+
+# Natural Language Processing and Search
+faiss-cpu==1.9.0.post1
+rank_bm25==0.2.2
+
+# PDF Processing
+pypdf==5.1.0
+

@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/app/src
+      - ./papers:/app/src/docs
+      - vectorstore_data:/app/src/data/vectorstore
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app
+      - PORT=8000
+    restart: unless-stopped
+
+volumes:
+  vectorstore_data:
